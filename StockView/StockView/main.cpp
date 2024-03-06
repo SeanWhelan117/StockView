@@ -1,5 +1,9 @@
 #include <cpprest/http_client.h>
 #include <cpprest/filestream.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 using namespace utility;                    // Common utilities like string conversions
 using namespace web;                        // Common features like URIs.
@@ -7,8 +11,38 @@ using namespace web::http;                  // Common HTTP functionality
 using namespace web::http::client;          // HTTP client features
 using namespace concurrency::streams;       // Asynchronous streams
 
+
+class LoadAPIKeyFromFile
+{
+ public:
+
+     std::string Loader()
+     {
+         std::fstream myFile;
+         myFile.open(".\\API.txt");
+
+         if (myFile.is_open())
+         {
+             getline(myFile, API_KEY);
+             myFile.close();
+         }
+
+         return API_KEY;
+     }
+
+private:
+
+    std::string API_KEY;
+};
+
+
 int main(int argc, char* argv[])
 {
+    LoadAPIKeyFromFile loadAPI;
+
+    std::string currentAPIKey = loadAPI.Loader();
+    std::cout << currentAPIKey << std::endl;
+
     auto fileStream = std::make_shared<ostream>();
 
     // Open stream to output file.
@@ -21,7 +55,7 @@ int main(int argc, char* argv[])
 
         // Build request URI and start the request.
         uri_builder builder(U("/search"));
-        builder.append_query(U("q"), U("cpprestsdk github"));
+        builder.append_query(U("q"), U("seanwhelan117 github"));
         return client.request(methods::GET, builder.to_string());
     })
 
