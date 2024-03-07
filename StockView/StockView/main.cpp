@@ -15,13 +15,21 @@ using namespace concurrency::streams;       // Asynchronous streams
 
 void getIntradayData(std::string t_APIKey)
 {
+    const string_t APIKey = conversions::to_string_t(t_APIKey);
 
     uri_builder builder(U("https://www.alphavantage.co/query"));
     builder.append_query(U("function"), U("TIME_SERIES_INTRADAY"));
     builder.append_query(U("symbol"), U("LSE")); // London Stock Exchange
     builder.append_query(U("interval"), U("30min"));
     builder.append_query(U("datatype"), U("csv"));
-    builder.append_query(U("apikey"), t_APIKey);
+    builder.append_query(U("apikey"), APIKey);
+
+    http_client client(builder.to_uri());
+    client.request(methods::GET).then([](http_response t_response) 
+    {
+
+    }).wait();
+
 
 }
 
