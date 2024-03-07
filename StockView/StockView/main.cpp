@@ -27,6 +27,14 @@ void getIntradayData(std::string t_APIKey)
     http_client client(builder.to_uri());
     client.request(methods::GET).then([](http_response t_response) 
     {
+        if (t_response.status_code() == status_codes::OK)//if 200 / okay
+        {
+            std::cout << "OK!" << std::endl;
+        }
+        else 
+        {
+            std::cerr << "Failed to fetch the data from the API, status code: " << t_response.status_code() << std::endl;
+        }
 
     }).wait();
 
@@ -43,6 +51,8 @@ int main()
     std::cout << currentAPIKey << std::endl;
 
     std::cout << "Would you like intraday data" << std::endl;
+    std::cout << "Y/N" << std::endl;
+
     std::cin >> answer;
 
     if (answer == 'Y' || answer == 'y')
@@ -50,7 +60,5 @@ int main()
         getIntradayData(currentAPIKey);
     }
     
-    
-
     return 0;
 }
