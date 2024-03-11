@@ -20,7 +20,7 @@ void getIntradayData(std::string t_APIKey)
     uri_builder builder(U("https://www.alphavantage.co/query"));
     builder.append_query(U("function"), U("TIME_SERIES_INTRADAY"));
     builder.append_query(U("symbol"), U("LSE")); // London Stock Exchange
-    builder.append_query(U("interval"), U("30min"));
+    builder.append_query(U("interval"), U("5min"));
     builder.append_query(U("datatype"), U("csv"));
     builder.append_query(U("apikey"), APIKey);
 
@@ -29,7 +29,15 @@ void getIntradayData(std::string t_APIKey)
     {
         if (t_response.status_code() == status_codes::OK)//if 200 / okay
         {
-            std::cout << "OK!" << std::endl;
+            //std::cout << "OK!" << std::endl;
+
+            auto bodyStream = t_response.body();
+            concurrency::streams::container_buffer<std::string> buffer;
+            bodyStream.read_to_end(buffer).get();
+
+            std::string csvData = buffer.collection();
+
+            std::cout << "CSV data:\n" << csvData << std::endl;
         }
         else 
         {
@@ -48,7 +56,7 @@ int main()
     LoadFromFile loader;
 
     std::string currentAPIKey = loader.LoadAPIKey();
-    std::cout << currentAPIKey << std::endl;
+    std::cout << "Your API Key is: " << currentAPIKey << std::endl;
 
     std::cout << "Would you like intraday data" << std::endl;
     std::cout << "Y/N" << std::endl;
