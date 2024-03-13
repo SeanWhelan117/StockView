@@ -24,6 +24,8 @@ void getIntradayData(std::string t_APIKey)
     builder.append_query(U("datatype"), U("csv"));
     builder.append_query(U("apikey"), APIKey);
 
+    std::wcout << "Final URI: " << builder.to_uri().to_string() << std::endl;
+
     http_client client(builder.to_uri());
     client.request(methods::GET).then([](http_response t_response) 
     {
