@@ -21,7 +21,7 @@ void getIntradayData(std::string t_APIKey)
     builder.append_query(U("function"), U("TIME_SERIES_INTRADAY"));
     builder.append_query(U("symbol"), U("LSE")); // London Stock Exchange
     builder.append_query(U("interval"), U("5min"));
-    builder.append_query(U("datatype"), U("csv"));
+    builder.append_query(U("datatype"), U("json"));
     builder.append_query(U("apikey"), APIKey);
 
     std::wcout << "Final URI: " << builder.to_uri().to_string() << std::endl;
@@ -33,13 +33,26 @@ void getIntradayData(std::string t_APIKey)
         {
             //std::cout << "OK!" << std::endl;
 
-            auto bodyStream = t_response.body();
-            concurrency::streams::container_buffer<std::string> buffer;
-            bodyStream.read_to_end(buffer).get();
+            auto json_body = t_response.extract_json().get(); //Parse JSON Response
 
-            std::string csvData = buffer.collection();
 
-            std::cout << "CSV data:\n" << csvData << std::endl;
+            auto series = json_body.at(U("Time Series (5min)")).as_object(); //relevatn info
+
+
+            for (const auto& entry : series)
+            {
+                std::wcout << L"Timestamp: " << entry.first << std::endl;
+
+                std::wcout << L"Open: " << entry.second.at(U("1. open")).as_string() << std::endl;
+
+                std::wcout << L"High: " << entry.second.at(U("2. high")).as_string() << std::endl;
+                std::wcout << L"Low: " << entry.second.at(U("3. low")).as_string() << std::endl;
+
+                std::wcout << L"Close: " << entry.second.at(U("4. close")).as_string() << std::endl;
+
+                std::wcout << L"Volume: " << entry.second.at(U("5. volume")).as_string() << std::endl;
+                std::wcout << std::endl;
+            }
         }
         else 
         {
