@@ -19,7 +19,7 @@ void getIntradayData(std::string t_APIKey)
 
     uri_builder builder(U("https://www.alphavantage.co/query"));
     builder.append_query(U("function"), U("TIME_SERIES_INTRADAY"));
-    builder.append_query(U("symbol"), U("LSE")); // London Stock Exchange
+    builder.append_query(U("symbol"), U("IBM"));
     builder.append_query(U("interval"), U("5min"));
     builder.append_query(U("datatype"), U("json"));
     builder.append_query(U("apikey"), APIKey);
@@ -31,28 +31,34 @@ void getIntradayData(std::string t_APIKey)
     {
         if (t_response.status_code() == status_codes::OK)//if 200 / okay
         {
-            //std::cout << "OK!" << std::endl;
+            std::cout << "OK!" << std::endl;
 
             auto json_body = t_response.extract_json().get(); //Parse JSON Response
+            std::wcout << L"JSON response:\n" << json_body.serialize() << std::endl;
 
-
-            auto series = json_body.at(U("Time Series (5min)")).as_object(); //relevatn info
-
-
-            for (const auto& entry : series)
-            {
-                std::wcout << L"Timestamp: " << entry.first << std::endl;
-
-                std::wcout << L"Open: " << entry.second.at(U("1. open")).as_string() << std::endl;
-
-                std::wcout << L"High: " << entry.second.at(U("2. high")).as_string() << std::endl;
-                std::wcout << L"Low: " << entry.second.at(U("3. low")).as_string() << std::endl;
-
-                std::wcout << L"Close: " << entry.second.at(U("4. close")).as_string() << std::endl;
-
-                std::wcout << L"Volume: " << entry.second.at(U("5. volume")).as_string() << std::endl;
-                std::wcout << std::endl;
+            try {
+                auto series = json_body.at(U("Time Series (5min)")).as_object();
+                // Process the series data...
             }
+            catch (const json::json_exception& e) {
+                std::cerr << "Error accessing JSON key: " << e.what() << std::endl;
+            }
+
+
+            //for (const auto& entry : series)
+            //{
+            //    std::wcout << L"Timestamp: " << entry.first << std::endl;
+
+            //    std::wcout << L"Open: " << entry.second.at(U("1. open")).as_string() << std::endl;
+
+            //    std::wcout << L"High: " << entry.second.at(U("2. high")).as_string() << std::endl;
+            //    std::wcout << L"Low: " << entry.second.at(U("3. low")).as_string() << std::endl;
+
+            //    std::wcout << L"Close: " << entry.second.at(U("4. close")).as_string() << std::endl;
+
+            //    std::wcout << L"Volume: " << entry.second.at(U("5. volume")).as_string() << std::endl;
+            //    std::wcout << std::endl;
+           // }
         }
         else 
         {
