@@ -13,14 +13,17 @@ using namespace web::http::client;          // HTTP client features
 using namespace concurrency::streams;       // Asynchronous streams
 
 
-void getIntradayData(std::string t_APIKey)
+void getIntradayData(std::string t_APIKey, std::string t_symbol, std::string t_interval)
 {
     const string_t APIKey = conversions::to_string_t(t_APIKey);
+    const string_t symbol = conversions::to_string_t(t_symbol);
+    const string_t interval = conversions::to_string_t(t_interval);
+
 
     uri_builder builder(U("https://www.alphavantage.co/query"));
     builder.append_query(U("function"), U("TIME_SERIES_INTRADAY"));
-    builder.append_query(U("symbol"), U("IBM"));
-    builder.append_query(U("interval"), U("5min"));
+    builder.append_query(U("symbol"), symbol);
+    builder.append_query(U("interval"), interval);
     builder.append_query(U("datatype"), U("json"));
     builder.append_query(U("apikey"), APIKey);
 
@@ -34,6 +37,7 @@ void getIntradayData(std::string t_APIKey)
             std::cout << "OK!" << std::endl;
 
             auto json_body = t_response.extract_json().get(); //Parse JSON Response
+
             //std::wcout << L"JSON response:\n" << json_body.serialize() << std::endl;
 
             try {
@@ -71,6 +75,7 @@ void getIntradayData(std::string t_APIKey)
 int main()
 {
     char answer;
+    std::string symbol, interval;
 
     LoadFromFile loader;
 
@@ -84,7 +89,13 @@ int main()
 
     if (answer == 'Y' || answer == 'y')
     {
-        getIntradayData(currentAPIKey);
+        std::cout << "Please enter a symbol from the API list that matches the stock / ETF you want data on" << std::endl;
+        std::cin >> symbol;
+
+        std::cout << "Please enter an approved interval between the data points 1min, 5min, 15min, 30min, 60min" << std::endl;
+        std::cin >> interval;
+
+        getIntradayData(currentAPIKey,symbol , interval);
     }
     
     return 0;
