@@ -34,31 +34,29 @@ void getIntradayData(std::string t_APIKey)
             std::cout << "OK!" << std::endl;
 
             auto json_body = t_response.extract_json().get(); //Parse JSON Response
-            std::wcout << L"JSON response:\n" << json_body.serialize() << std::endl;
+            //std::wcout << L"JSON response:\n" << json_body.serialize() << std::endl;
 
             try {
                 auto series = json_body.at(U("Time Series (5min)")).as_object();
-                // Process the series data...
+                for (const auto& entry : series)
+                {
+                    std::wcout << L"Timestamp: " << entry.first << std::endl;
+
+                    std::wcout << L"Open: " << entry.second.at(U("1. open")).as_string() << std::endl;
+
+                    std::wcout << L"High: " << entry.second.at(U("2. high")).as_string() << std::endl;
+                    std::wcout << L"Low: " << entry.second.at(U("3. low")).as_string() << std::endl;
+
+                    std::wcout << L"Close: " << entry.second.at(U("4. close")).as_string() << std::endl;
+
+                    std::wcout << L"Volume: " << entry.second.at(U("5. volume")).as_string() << std::endl;
+                    std::wcout << std::endl;
+                 }
             }
             catch (const json::json_exception& e) {
                 std::cerr << "Error accessing JSON key: " << e.what() << std::endl;
             }
 
-
-            //for (const auto& entry : series)
-            //{
-            //    std::wcout << L"Timestamp: " << entry.first << std::endl;
-
-            //    std::wcout << L"Open: " << entry.second.at(U("1. open")).as_string() << std::endl;
-
-            //    std::wcout << L"High: " << entry.second.at(U("2. high")).as_string() << std::endl;
-            //    std::wcout << L"Low: " << entry.second.at(U("3. low")).as_string() << std::endl;
-
-            //    std::wcout << L"Close: " << entry.second.at(U("4. close")).as_string() << std::endl;
-
-            //    std::wcout << L"Volume: " << entry.second.at(U("5. volume")).as_string() << std::endl;
-            //    std::wcout << std::endl;
-           // }
         }
         else 
         {
