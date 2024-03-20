@@ -30,7 +30,7 @@ void getIntradayData(std::string t_APIKey, std::string t_symbol, std::string t_i
     std::wcout << "Final URI: " << builder.to_uri().to_string() << std::endl;
 
     http_client client(builder.to_uri());
-    client.request(methods::GET).then([](http_response t_response) 
+    client.request(methods::GET).then([interval](http_response t_response) 
     {
         if (t_response.status_code() == status_codes::OK)//if 200 / okay
         {
@@ -40,8 +40,11 @@ void getIntradayData(std::string t_APIKey, std::string t_symbol, std::string t_i
 
             //std::wcout << L"JSON response:\n" << json_body.serialize() << std::endl;
 
-            try {
-                auto series = json_body.at(U("Time Series (5min)")).as_object();
+            try 
+            {
+                auto intervalKey = U("Time Series (") + interval + U(")");
+                auto series = json_body.at(intervalKey).as_object();
+
                 for (const auto& entry : series)
                 {
                     std::wcout << L"Timestamp: " << entry.first << std::endl;
@@ -57,7 +60,8 @@ void getIntradayData(std::string t_APIKey, std::string t_symbol, std::string t_i
                     std::wcout << std::endl;
                  }
             }
-            catch (const json::json_exception& e) {
+            catch (const json::json_exception& e) 
+            {
                 std::cerr << "Error accessing JSON key: " << e.what() << std::endl;
             }
 
