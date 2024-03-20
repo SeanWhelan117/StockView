@@ -101,6 +101,9 @@ int main()
 
         getIntradayData(currentAPIKey,symbol , interval);
     }
-    
+
+    std::cout << "If you are finished press any button to exit " << std::endl;
+    std::cin >> answer;
+
     return 0;
 }
