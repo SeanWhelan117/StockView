@@ -13,7 +13,7 @@ StockView is a C++ application designed to provide users with access to financia
 
 1: clone the project
   - Click tags on the main project page, download the source code zip and unzip the folder to a location of your choosing
-  - ![image](link)
+  - ![image](Images/StockView1.png)
 
 2: Acquiring your API Key
   - Go to the Alpha Vantage website [here](https://www.alphavantage.co/support/#api-key)
@@ -23,13 +23,13 @@ StockView is a C++ application designed to provide users with access to financia
 
 3: Adding your API Key
   - Open the unzipped source code folder and naviage into the CMD Release folder
-  - ![image](link)
+  - ![image](Images/StockView2.png)
   - Open the text file entitled "API" and replace yourKeyHere with your actual key.
   - Verify the key is correct and you havent added any spaces before or after the key, or any other empty rows
 
 4: Running the program and retrieving information
   - Run the application file entitled "StockView"
-  - ![image](link)
+  - ![image](Images/StockView3.png)
   - When asked to "Please enter a symbol from the API list that matches the stock / ETF you want data on" please do so.
   - You can find an up to date excel document with all the available stock and ETF symbols [here](https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=demo)
       - Example: MSFT = Microsoft Corporation
