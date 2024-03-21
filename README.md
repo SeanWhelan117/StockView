@@ -37,3 +37,5 @@ StockView is a C++ application designed to provide users with access to financia
   - When asked to "Please enter an approved interval between the data points 1min, 5min, 15min, 30min, 60min" please respond with one of those options
   - Once you're finished viewing your data press any character and ENTER/RETURN to exit.
 
+###  GUI version:
+  - Coming soon...
